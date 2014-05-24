@@ -1,1 +1,5 @@
 /bin
+/dist/
+/build/
+/.classpath
+/.project
