@@ -90,10 +90,6 @@ public class PhysicsSpace {
         return this.physicsWorld.removeJoint(joint);
     }
 
-    public void update(final float elapsedTime) {
-        this.physicsWorld.updatev(elapsedTime);
-    }
-
     public void updateFixed(final float elapsedTime) {
         this.physicsWorld.update(elapsedTime);
     }

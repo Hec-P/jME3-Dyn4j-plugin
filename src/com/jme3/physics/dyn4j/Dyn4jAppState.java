@@ -77,6 +77,7 @@ public class Dyn4jAppState extends AbstractAppState {
     protected boolean debugEnabled = false;
 
     private final Runnable parallelPhysicsUpdate = new Runnable() {
+        @Override
         public void run() {
             if (!isEnabled()) {
                 return;
@@ -153,6 +154,7 @@ public class Dyn4jAppState extends AbstractAppState {
         this.executor = new ScheduledThreadPoolExecutor(1);
 
         final Callable<Boolean> call = new Callable<Boolean>() {
+            @Override
             public Boolean call() throws Exception {
                 Dyn4jAppState.this.physicsSpace = new PhysicsSpace(Dyn4jAppState.this.initialCapacity,
                         Dyn4jAppState.this.bounds);
@@ -218,7 +220,7 @@ public class Dyn4jAppState extends AbstractAppState {
     public void render(final RenderManager rm) {
         if (this.threadingType == ThreadingType.SEQUENTIAL) {
             final float timeStep = isEnabled() ? this.tpf * this.physicsSpace.getSpeed() : 0;
-            this.physicsSpace.update(timeStep);
+            this.physicsSpace.updateFixed(timeStep);
         }
     }
 
