@@ -47,6 +47,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.physics.dyn4j.PhysicsSpace;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jBodyDebugControl;
+import com.jme3.physics.dyn4j.debug.control.Dyn4jJointDebugControl;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
@@ -97,10 +98,12 @@ public class Dyn4jDebugAppState extends AbstractAppState {
     @Override
     public void update(final float tpf) {
         super.update(tpf);
-        // update all object links
+
+        // Update all object links
         updateRigidBodies();
-        // updateJoints();
-        // update our debug root node
+        updateJoints();
+
+        // Update debug root node
         this.physicsDebugRootNode.updateLogicalState(tpf);
         this.physicsDebugRootNode.updateGeometricState();
     }
@@ -114,45 +117,74 @@ public class Dyn4jDebugAppState extends AbstractAppState {
     }
 
     private void updateRigidBodies() {
-        final HashMap<Body, Spatial> oldObjects = this.bodies;
+        final HashMap<Body, Spatial> oldBodies = this.bodies;
         this.bodies = new HashMap<Body, Spatial>();
-        final Collection<Body> current = this.space.getBodies();
-        // create new map
-        for (final Body physicsObject : current) {
-            // copy existing spatials
-            if (oldObjects.containsKey(physicsObject)) {
-                final Spatial spat = oldObjects.get(physicsObject);
-                this.bodies.put(physicsObject, spat);
-                oldObjects.remove(physicsObject);
+        final Collection<Body> currentBodies = this.space.getBodies();
+
+        // Create new map of bodies
+        for (final Body body : currentBodies) {
+
+            if (oldBodies.containsKey(body)) {
+
+                // Copy existing spatial
+                final Spatial spatial = oldBodies.get(body);
+                this.bodies.put(body, spatial);
+                oldBodies.remove(body);
+
             } else {
+
                 // if (filter == null || filter.displayObject(physicsObject)) {
                 logger.log(Level.FINE, "Create new debug RigidBody");
-                // create new spatial
-                final Node node = new Node(physicsObject.toString());
-                node.addControl(new Dyn4jBodyDebugControl(this, physicsObject));
-                this.bodies.put(physicsObject, node);
+                // Create new spatial
+                final Node node = new Node(body.toString());
+                node.addControl(new Dyn4jBodyDebugControl(this, body));
+                this.bodies.put(body, node);
                 this.physicsDebugRootNode.attachChild(node);
                 // }
+
             }
         }
-        // remove leftover spatials
-        for (final Spatial spatial : oldObjects.values()) {
+
+        // Remove leftover spatials
+        for (final Spatial spatial : oldBodies.values()) {
             spatial.removeFromParent();
         }
     }
 
-    /*
-     * private void updateJoints() { final HashMap<Joint, Spatial> oldObjects = this.joints; this.joints = new
-     * HashMap<Joint, Spatial>(); final Collection<Joint> current = this.space.getJoints(); // create new map for (final
-     * Joint physicsObject : current) { // copy existing spatials if (oldObjects.containsKey(physicsObject)) { final
-     * Spatial spat = oldObjects.get(physicsObject); this.joints.put(physicsObject, spat);
-     * oldObjects.remove(physicsObject); } else { // if (filter == null || filter.displayObject(physicsObject)) {
-     * logger.log(Level.FINE, "Create new debug Joint"); // create new spatial final Node node = new
-     * Node(physicsObject.toString()); node.addControl(new BulletJointDebugControl(this, physicsObject));
-     * this.joints.put(physicsObject, node); this.physicsDebugRootNode.attachChild(node); // } } } // remove leftover
-     * spatials for (final Map.Entry<Joint, Spatial> entry : oldObjects.entrySet()) { final Joint object =
-     * entry.getKey(); final Spatial spatial = entry.getValue(); spatial.removeFromParent(); } }
-     */
+    private void updateJoints() {
+        final HashMap<Joint, Spatial> oldObjects = this.joints;
+        this.joints = new HashMap<Joint, Spatial>();
+        final Collection<Joint> currentJoints = this.space.getJoints();
+
+        // Create new map of joints
+        for (final Joint joint : currentJoints) {
+
+            if (oldObjects.containsKey(joint)) {
+
+                // Copy existing spatial
+                final Spatial spat = oldObjects.get(joint);
+                this.joints.put(joint, spat);
+                oldObjects.remove(joint);
+
+            } else {
+
+                // if (filter == null || filter.displayObject(physicsObject)) {
+                logger.log(Level.FINE, "Create new debug Joint");
+                // Create new spatial
+                final Node node = new Node(joint.toString());
+                node.addControl(new Dyn4jJointDebugControl(this, joint));
+                this.joints.put(joint, node);
+                this.physicsDebugRootNode.attachChild(node);
+                // }
+
+            }
+        }
+
+        // Remove leftover spatials
+        for (final Spatial spatial : oldObjects.values()) {
+            spatial.removeFromParent();
+        }
+    }
 
     public Material getDebugMaterial(final PhysicDebugColor physicDebugColor) {
         return this.debugShapeFactory.getDebugMaterial(physicDebugColor);
@@ -160,6 +192,10 @@ public class Dyn4jDebugAppState extends AbstractAppState {
 
     public Node getDebugShape(final Convex shape) {
         return this.debugShapeFactory.getDebugShape(shape);
+    }
+
+    public Node getDebugShape(final Joint joint) {
+        return this.debugShapeFactory.getDebugShape(joint);
     }
 
 }

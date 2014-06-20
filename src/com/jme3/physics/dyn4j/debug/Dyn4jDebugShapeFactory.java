@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.dyn4j.dynamics.joint.DistanceJoint;
+import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.geometry.Capsule;
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Convex;
@@ -58,6 +60,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Arrow;
+import com.jme3.scene.shape.Line;
 
 /**
  * 
@@ -157,6 +160,25 @@ public class Dyn4jDebugShapeFactory {
 
         } else {
             logger.warning(String.format("#### Shape '%s' not supported. ####", shape.getClass().getSimpleName()));
+        }
+
+        return node;
+    }
+
+    public Node getDebugShape(final Joint joint) {
+        final Node node = new Node(joint.getId().toString());
+
+        if (joint instanceof DistanceJoint) {
+            final DistanceJoint distanceJoint = (DistanceJoint) joint;
+
+            final Vector3f p1 = Converter.vector2ToVector3f(distanceJoint.getAnchor1());
+            final Vector3f p2 = Converter.vector2ToVector3f(distanceJoint.getAnchor2());
+            final Line lineDebug = new Line(p1, p2);
+
+            final Geometry lineGeom = new Geometry(joint.getId().toString(), lineDebug);
+            node.attachChild(lineGeom);
+        } else {
+            logger.warning(String.format("#### Joint '%s' not supported. ####", joint.getClass().getSimpleName()));
         }
 
         return node;

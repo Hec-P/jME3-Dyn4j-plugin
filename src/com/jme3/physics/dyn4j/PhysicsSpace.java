@@ -126,4 +126,9 @@ public class PhysicsSpace {
     public List<Joint> getJoints() {
         return this.physicsWorld.getJoints();
     }
+
+    public World getPhysicsWorld() {
+        return this.physicsWorld;
+    }
+
 }
