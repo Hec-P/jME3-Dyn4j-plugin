@@ -45,17 +45,20 @@ public enum PhysicDebugColor {
     /***/
     RED(ColorRGBA.Red),
 
-    /***/
+    /** Color for inactive joints */
     GREEN(ColorRGBA.Green),
 
-    /***/
+    /** Color for active joints */
     YELLOW(ColorRGBA.Yellow),
 
     /** Color for active bodies. */
     MAGENTA(ColorRGBA.Magenta),
 
-    /***/
+    /** Color for anchors from inactive joints */
     PINK(ColorRGBA.Pink),
+
+    /** Color for anchors from active joints */
+    ORANGE(ColorRGBA.Orange),
 
     /** Color for inactive bodies */
     GRAY(ColorRGBA.Gray);

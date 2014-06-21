@@ -228,7 +228,7 @@ public class Dyn4jAppState extends AbstractAppState {
     public void setEnabled(final boolean enabled) {
         if (enabled) {
             schedulePhysicsCalculationTask();
-        } else {
+        } else if (this.executor != null) {
             this.executor.remove(this.parallelPhysicsUpdate);
         }
         super.setEnabled(enabled);
