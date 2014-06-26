@@ -172,8 +172,10 @@ public class Dyn4jAppState extends AbstractAppState {
     }
 
     private void schedulePhysicsCalculationTask() {
-        this.executor.scheduleAtFixedRate(this.parallelPhysicsUpdate, 0l, TIME_STEP_IN_MICROSECONDS,
-                TimeUnit.MICROSECONDS);
+        if (this.executor != null) {
+            this.executor.scheduleAtFixedRate(this.parallelPhysicsUpdate, 0l, TIME_STEP_IN_MICROSECONDS,
+                    TimeUnit.MICROSECONDS);
+        }
     }
 
     // FIXME Remove this method but check how to implement tests

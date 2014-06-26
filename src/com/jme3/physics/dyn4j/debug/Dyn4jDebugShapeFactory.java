@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 
 import org.dyn4j.dynamics.joint.DistanceJoint;
 import org.dyn4j.dynamics.joint.Joint;
+import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.geometry.Capsule;
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Convex;
@@ -51,6 +52,9 @@ import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.physics.dyn4j.Converter;
+import com.jme3.physics.dyn4j.debug.control.Dyn4jDistanceJointDebugControl;
+import com.jme3.physics.dyn4j.debug.control.Dyn4jJointDebugControl;
+import com.jme3.physics.dyn4j.debug.control.Dyn4jRevoluteJointDebugControl;
 import com.jme3.physics.dyn4j.debug.shape.CapsuleDebug;
 import com.jme3.physics.dyn4j.debug.shape.CircleDebug;
 import com.jme3.physics.dyn4j.debug.shape.HalfEllipseDebug;
@@ -60,7 +64,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Arrow;
-import com.jme3.scene.shape.Line;
 
 /**
  * 
@@ -165,27 +168,22 @@ public class Dyn4jDebugShapeFactory {
         return node;
     }
 
-    public Node getDebugShape(final Joint joint) {
-        final Node node = new Node(joint.getId().toString());
+    public Material getDebugMaterial(final PhysicDebugColor physicDebugColor) {
+        return this.debugMaterials.get(physicDebugColor);
+    }
+
+    public Dyn4jJointDebugControl getJointDebugControl(final Dyn4jDebugAppState dyn4jDebugAppState, final Joint joint) {
+        Dyn4jJointDebugControl jointControl = null;
 
         if (joint instanceof DistanceJoint) {
-            final DistanceJoint distanceJoint = (DistanceJoint) joint;
-
-            final Vector3f p1 = Converter.vector2ToVector3f(distanceJoint.getAnchor1());
-            final Vector3f p2 = Converter.vector2ToVector3f(distanceJoint.getAnchor2());
-            final Line lineDebug = new Line(p1, p2);
-
-            final Geometry lineGeom = new Geometry(joint.getId().toString(), lineDebug);
-            node.attachChild(lineGeom);
+            jointControl = new Dyn4jDistanceJointDebugControl(dyn4jDebugAppState, joint);
+        } else if (joint instanceof RevoluteJoint) {
+            jointControl = new Dyn4jRevoluteJointDebugControl(dyn4jDebugAppState, joint);
         } else {
             logger.warning(String.format("#### Joint '%s' not supported. ####", joint.getClass().getSimpleName()));
         }
 
-        return node;
-    }
-
-    public Material getDebugMaterial(final PhysicDebugColor physicDebugColor) {
-        return this.debugMaterials.get(physicDebugColor);
+        return jointControl;
     }
 
     private Node createOriginAxes(final Vector2 center) {

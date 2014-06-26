@@ -47,7 +47,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.physics.dyn4j.PhysicsSpace;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jBodyDebugControl;
-import com.jme3.physics.dyn4j.debug.control.Dyn4jJointDebugControl;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
@@ -172,7 +171,7 @@ public class Dyn4jDebugAppState extends AbstractAppState {
                 logger.log(Level.FINE, "Create new debug Joint");
                 // Create new spatial
                 final Node node = new Node(joint.toString());
-                node.addControl(new Dyn4jJointDebugControl(this, joint));
+                node.addControl(this.debugShapeFactory.getJointDebugControl(this, joint));
                 this.joints.put(joint, node);
                 this.physicsDebugRootNode.attachChild(node);
                 // }
@@ -192,10 +191,6 @@ public class Dyn4jDebugAppState extends AbstractAppState {
 
     public Node getDebugShape(final Convex shape) {
         return this.debugShapeFactory.getDebugShape(shape);
-    }
-
-    public Node getDebugShape(final Joint joint) {
-        return this.debugShapeFactory.getDebugShape(joint);
     }
 
 }
