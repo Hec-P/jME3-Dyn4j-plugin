@@ -42,7 +42,10 @@ public enum PhysicDebugColor {
     /** Color for asleep bodies */
     BLUE(ColorRGBA.Blue),
 
-    /***/
+    /** Color for anchors from active joints for filled square representation */
+    BROWN_FILLED(ColorRGBA.Brown, false),
+
+    /** Color for active Mouse joints */
     RED(ColorRGBA.Red),
 
     /** Color for inactive joints */
@@ -54,6 +57,12 @@ public enum PhysicDebugColor {
     /** Color for active bodies. */
     MAGENTA(ColorRGBA.Magenta),
 
+    /** Color for anchors from inactive joints for filled circle representation */
+    PINK_FILLED(ColorRGBA.Pink, false),
+
+    /** Color for anchors from active joints for filled circle representation */
+    ORANGE_FILLED(ColorRGBA.Orange, false),
+
     /** Color for anchors from inactive joints */
     PINK(ColorRGBA.Pink),
 
@@ -64,12 +73,22 @@ public enum PhysicDebugColor {
     GRAY(ColorRGBA.Gray);
 
     private ColorRGBA color = null;
+    private boolean wireFrame = true;
 
     private PhysicDebugColor(final ColorRGBA color) {
+        this(color, true);
+    }
+
+    private PhysicDebugColor(final ColorRGBA color, final boolean isWireFrame) {
         this.color = color;
+        this.wireFrame = isWireFrame;
     }
 
     public ColorRGBA getColor() {
         return this.color;
+    }
+
+    public boolean isWireFrame() {
+        return this.wireFrame;
     }
 }
