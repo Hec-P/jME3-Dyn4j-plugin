@@ -44,7 +44,6 @@ import org.dyn4j.dynamics.Settings;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.bullet.BulletAppState;
 import com.jme3.physics.dyn4j.debug.Dyn4jDebugAppState;
 import com.jme3.renderer.RenderManager;
 
@@ -165,7 +164,7 @@ public class Dyn4jAppState extends AbstractAppState {
         try {
             this.executor.submit(call).get();
         } catch (final Exception ex) {
-            Logger.getLogger(BulletAppState.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Dyn4jAppState.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         schedulePhysicsCalculationTask();
