@@ -103,7 +103,7 @@ public class Dyn4jDebugShapeFactory {
         if (shape instanceof Wound) {
             final Wound wound = (Wound) shape;
 
-            final Vector3f[] vertices = Converter.vector2ToVector3f(wound.getVertices());
+            final Vector3f[] vertices = Converter.toVector3f(wound.getVertices());
             final WoundDebug woundDebug = new WoundDebug(vertices);
 
             node.attachChild(new Geometry(shape.getId().toString(), woundDebug));
@@ -111,7 +111,7 @@ public class Dyn4jDebugShapeFactory {
         } else if (shape instanceof Circle) {
             final Circle circle = (Circle) shape;
 
-            final float radius = Converter.doubleToFloat(circle.getRadius());
+            final float radius = Converter.toFloat(circle.getRadius());
             final CircleDebug circleDebug = new CircleDebug(radius, CIRCLE_SEGMENT_NUMBER);
 
             node.attachChild(new Geometry(shape.getId().toString(), circleDebug));
@@ -119,8 +119,8 @@ public class Dyn4jDebugShapeFactory {
         } else if (shape instanceof Capsule) {
             final Capsule capsule = (Capsule) shape;
 
-            final float width = Converter.doubleToFloat(capsule.getLength());
-            final float height = Converter.doubleToFloat(capsule.getCapRadius());
+            final float width = Converter.toFloat(capsule.getLength());
+            final float height = Converter.toFloat(capsule.getCapRadius());
 
             final CapsuleDebug capsuleDebug = new CapsuleDebug(width, height, CIRCLE_SEGMENT_NUMBER);
             final Geometry capsuleGeom = new Geometry(shape.getId().toString(), capsuleDebug);
@@ -129,8 +129,8 @@ public class Dyn4jDebugShapeFactory {
         } else if (shape instanceof Ellipse) {
             final Ellipse ellipse = (Ellipse) shape;
 
-            final float scaleX = Converter.doubleToFloat(ellipse.getWidth());
-            final float scaleY = Converter.doubleToFloat(ellipse.getHeight());
+            final float scaleX = Converter.toFloat(ellipse.getWidth());
+            final float scaleY = Converter.toFloat(ellipse.getHeight());
 
             final CircleDebug ellipseDebug = new CircleDebug(CIRCLE_SEGMENT_NUMBER, 1);
 
@@ -142,10 +142,10 @@ public class Dyn4jDebugShapeFactory {
             final HalfEllipse halfEllipse = (HalfEllipse) shape;
 
             // The width of Dyn4j's halfEllipse is diameter on x axis. I need the radius on x axis (halfWidth).
-            final float width = Converter.doubleToFloat(halfEllipse.getHalfWidth());
+            final float width = Converter.toFloat(halfEllipse.getHalfWidth());
 
             // the height of Dyn4j's halfEllipse is the radius on y axis.
-            final float height = Converter.doubleToFloat(halfEllipse.getHeight());
+            final float height = Converter.toFloat(halfEllipse.getHeight());
             final HalfEllipseDebug halfEllipseDebug = new HalfEllipseDebug(width, height, CIRCLE_SEGMENT_NUMBER / 2);
 
             final Geometry halfEllipseGeom = new Geometry(shape.getId().toString(), halfEllipseDebug);
@@ -154,8 +154,8 @@ public class Dyn4jDebugShapeFactory {
         } else if (shape instanceof Slice) {
             final Slice slice = (Slice) shape;
 
-            final float radius = Converter.doubleToFloat(slice.getSliceRadius());
-            final float angle = Converter.doubleToFloat(slice.getTheta());
+            final float radius = Converter.toFloat(slice.getSliceRadius());
+            final float angle = Converter.toFloat(slice.getTheta());
             final int segmentNumber = Math.round(angle * CIRCLE_SEGMENT_NUMBER / FastMath.TWO_PI);
 
             final SliceDebug sliceDebug = new SliceDebug(radius, angle, segmentNumber);
@@ -194,7 +194,7 @@ public class Dyn4jDebugShapeFactory {
         final Node node = new Node("Origin");
         node.attachChild(createAxisArrow(Vector3f.UNIT_X.mult(.25f), PhysicDebugColor.RED));
         node.attachChild(createAxisArrow(Vector3f.UNIT_Y.mult(.25f), PhysicDebugColor.GREEN));
-        node.setLocalTranslation(Converter.vector2ToVector3f(center));
+        node.setLocalTranslation(Converter.toVector3f(center));
 
         return node;
     }

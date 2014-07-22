@@ -13,7 +13,7 @@ public class Dyn4jRevoluteJointDebugControl extends Dyn4jJointDebugControl {
         super(dyn4jDebugAppState, joint);
 
         // joint.getAnchor1() and joint.getAnchor2() are equals
-        this.anchorGeom1 = createCircle("CircleGeom1", Converter.vector2ToVector3f(joint.getAnchor1()));
+        this.anchorGeom1 = createCircle("CircleGeom1", Converter.toVector3f(joint.getAnchor1()));
     }
 
     @Override

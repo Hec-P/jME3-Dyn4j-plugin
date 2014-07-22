@@ -52,8 +52,8 @@ public abstract class Dyn4jJointDebugControl extends AbstractControl {
 
     @Override
     protected void controlUpdate(final float tpf) {
-        final Vector3f p1 = Converter.vector2ToVector3f(this.joint.getAnchor1());
-        final Vector3f p2 = Converter.vector2ToVector3f(this.joint.getAnchor2());
+        final Vector3f p1 = Converter.toVector3f(this.joint.getAnchor1());
+        final Vector3f p2 = Converter.toVector3f(this.joint.getAnchor2());
 
         if (this.lineGeom != null) {
             final Mesh mesh = this.lineGeom.getMesh();

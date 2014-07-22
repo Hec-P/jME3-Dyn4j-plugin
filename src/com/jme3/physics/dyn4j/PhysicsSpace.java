@@ -107,7 +107,7 @@ public class PhysicsSpace {
     }
 
     public Vector3f getGravity() {
-        return Converter.vector2ToVector3f(this.physicsWorld.getGravity());
+        return Converter.toVector3f(this.physicsWorld.getGravity());
     }
 
     public void setSpeed(final float speed) {

@@ -135,7 +135,7 @@ public class Dyn4jDebugAppState extends AbstractAppState {
                 // if (filter == null || filter.displayObject(physicsObject)) {
                 logger.log(Level.FINE, "Create new debug RigidBody");
                 // Create new spatial
-                final Node node = new Node(body.toString());
+                final Node node = new Node(body.getId().toString());
                 node.addControl(new Dyn4jBodyDebugControl(this, body));
                 this.bodies.put(body, node);
                 this.physicsDebugRootNode.attachChild(node);

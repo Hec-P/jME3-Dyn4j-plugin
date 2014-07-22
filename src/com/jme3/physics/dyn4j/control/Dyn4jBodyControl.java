@@ -60,6 +60,10 @@ public class Dyn4jBodyControl extends AbstractControl {
         super.setSpatial(spatial);
     }
 
+    public Body getBody() {
+        return this.body;
+    }
+
     @Override
     protected void controlUpdate(final float tpf) {
         // Update spatial location and rotation
@@ -67,10 +71,14 @@ public class Dyn4jBodyControl extends AbstractControl {
         setPhysicRotation(this.body);
     }
 
+    @Override
+    protected void controlRender(final RenderManager rm, final ViewPort vp) {
+    }
+
     private void setPhysicRotation(final Body physicBody) {
         final Transform transform = physicBody.getTransform();
 
-        final float rotation = Converter.doubleToFloat(transform.getRotation());
+        final float rotation = Converter.toFloat(transform.getRotation());
 
         final TempVars tempVars = TempVars.get();
         final Quaternion quaternion = tempVars.quat1;
@@ -84,14 +92,10 @@ public class Dyn4jBodyControl extends AbstractControl {
     private void setPhysicLocation(final Body physicBody) {
         final Transform transform = physicBody.getTransform();
 
-        final float posX = Converter.doubleToFloat(transform.getTranslationX());
-        final float posY = Converter.doubleToFloat(transform.getTranslationY());
+        final float posX = Converter.toFloat(transform.getTranslationX());
+        final float posY = Converter.toFloat(transform.getTranslationY());
 
         this.spatial.setLocalTranslation(posX, posY, this.spatial.getLocalTranslation().z);
-    }
-
-    @Override
-    protected void controlRender(final RenderManager rm, final ViewPort vp) {
     }
 
 }
