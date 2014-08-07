@@ -8,6 +8,7 @@ import com.jme3.physics.dyn4j.Converter;
 import com.jme3.physics.dyn4j.debug.Dyn4jDebugAppState;
 import com.jme3.physics.dyn4j.debug.PhysicDebugColor;
 import com.jme3.physics.dyn4j.debug.shape.CircleDebug;
+import com.jme3.physics.dyn4j.debug.shape.CrossDebug;
 import com.jme3.physics.dyn4j.debug.shape.WoundDebug;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -22,7 +23,8 @@ public abstract class Dyn4jJointDebugControl extends AbstractControl {
 
     private static final float SQUARE_SEGMENT_SIZE = 0.2f;
     private static final int CIRCLE_SEGMENT_NUMBER = 10;
-    private static final float CIRCLE_RADIUS = .1f;
+    private static final float CIRCLE_RADIUS = 0.1f;
+    private static final float CROSS_SEGMENT_SIZE = 0.1f;
 
     protected Dyn4jDebugAppState dyn4jDebugAppState = null;
     protected Joint joint = null;
@@ -105,6 +107,16 @@ public abstract class Dyn4jJointDebugControl extends AbstractControl {
         this.geometry.attachChild(circleGeom);
 
         return circleGeom;
+    }
+
+    protected Geometry createCross(final String name, final Vector3f center) {
+        final CrossDebug crossDebug = new CrossDebug(CROSS_SEGMENT_SIZE);
+        final Geometry crossGeom = new Geometry(name + this.joint.getId().toString(), crossDebug);
+        crossGeom.setLocalTranslation(center);
+
+        this.geometry.attachChild(crossGeom);
+
+        return crossGeom;
     }
 
     protected Geometry createLine(final String name, final Vector3f p1, final Vector3f p2, final float lineWidth) {
