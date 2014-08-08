@@ -68,8 +68,20 @@ public class CrossDebug extends Mesh {
      *            the segment size of the cross.
      */
     public CrossDebug(final float segmentSize) {
+        this(DEFAULT_SEGMENT_SIZE, Mode.Lines);
+    }
+
+    /**
+     * Main constructor to build an instance of a cross.
+     * 
+     * @param segmentSize
+     *            the segment size of the cross.
+     * @param mode
+     *            the mesh mode.
+     */
+    public CrossDebug(final float segmentSize, final Mode mode) {
         super();
-        setMode(Mode.Lines);
+        setMode(mode);
         updateGeometry(segmentSize);
     }
 

@@ -18,7 +18,7 @@ public class Dyn4jRevoluteJointDebugControl extends Dyn4jJointDebugControl {
 
     @Override
     protected Material getAnchorGeom1Material(final boolean isJointActive) {
-        return getMaterial(isJointActive ? PhysicDebugColor.ORANGE_FILLED : PhysicDebugColor.PINK_FILLED);
+        return getMaterial(isJointActive ? PhysicDebugColor.ORANGE : PhysicDebugColor.PINK_FILLED);
     }
 
 }

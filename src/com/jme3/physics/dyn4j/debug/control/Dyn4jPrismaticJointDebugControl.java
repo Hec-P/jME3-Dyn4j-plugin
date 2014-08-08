@@ -23,12 +23,12 @@ public class Dyn4jPrismaticJointDebugControl extends Dyn4jJointDebugControl {
 
     @Override
     protected Material getLineGeomMaterial(final boolean isJointActive) {
-        return getMaterial(isJointActive ? PhysicDebugColor.BROWN_FILLED : PhysicDebugColor.GREEN);
+        return getMaterial(isJointActive ? PhysicDebugColor.BROWN_FILLED : PhysicDebugColor.PINK);
     }
 
     @Override
     protected Material getAnchorGeom1Material(final boolean isJointActive) {
-        return getMaterial(isJointActive ? PhysicDebugColor.ORANGE : PhysicDebugColor.PINK);
+        return getMaterial(isJointActive ? PhysicDebugColor.ORANGE : PhysicDebugColor.PINK_FILLED);
     }
 
 }

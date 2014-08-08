@@ -14,6 +14,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
+import com.jme3.scene.Mesh.Mode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
@@ -119,6 +120,16 @@ public abstract class Dyn4jJointDebugControl extends AbstractControl {
         return crossGeom;
     }
 
+    protected Geometry createPulleyCross(final String name, final Vector3f center) {
+        final CrossDebug crossDebug = new CrossDebug(CROSS_SEGMENT_SIZE, Mode.LineLoop);
+        final Geometry crossGeom = new Geometry(name + this.joint.getId().toString(), crossDebug);
+        crossGeom.setLocalTranslation(center);
+
+        this.geometry.attachChild(crossGeom);
+
+        return crossGeom;
+    }
+
     protected Geometry createLine(final String name, final Vector3f p1, final Vector3f p2, final float lineWidth) {
         final Line line = new Line(p1, p2);
         line.setLineWidth(lineWidth);
@@ -130,11 +141,11 @@ public abstract class Dyn4jJointDebugControl extends AbstractControl {
     }
 
     protected Material getLineGeomMaterial(final boolean isJointActive) {
-        return getMaterial(isJointActive ? PhysicDebugColor.YELLOW : PhysicDebugColor.GREEN);
+        return getMaterial(isJointActive ? PhysicDebugColor.YELLOW : PhysicDebugColor.PINK);
     }
 
     protected Material getAnchorGeom1Material(final boolean isJointActive) {
-        return getMaterial(isJointActive ? PhysicDebugColor.ORANGE : PhysicDebugColor.PINK);
+        return getMaterial(isJointActive ? PhysicDebugColor.ORANGE : PhysicDebugColor.PINK_FILLED);
     }
 
     protected Material getAnchorGeom2Material(final boolean isJointActive) {

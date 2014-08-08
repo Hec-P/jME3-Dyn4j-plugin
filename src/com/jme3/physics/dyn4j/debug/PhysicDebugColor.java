@@ -48,7 +48,7 @@ public enum PhysicDebugColor {
     /** Color for active Mouse joints */
     RED(ColorRGBA.Red),
 
-    /** Color for inactive joints */
+    /** Color for anchors from active joints */
     GREEN(ColorRGBA.Green),
 
     /** Color for active joints */
