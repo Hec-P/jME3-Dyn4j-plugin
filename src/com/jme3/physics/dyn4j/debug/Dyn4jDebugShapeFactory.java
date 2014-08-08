@@ -38,6 +38,7 @@ import java.util.logging.Logger;
 import org.dyn4j.dynamics.joint.DistanceJoint;
 import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.dynamics.joint.MouseJoint;
+import org.dyn4j.dynamics.joint.PrismaticJoint;
 import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.dynamics.joint.WeldJoint;
 import org.dyn4j.geometry.Capsule;
@@ -57,6 +58,7 @@ import com.jme3.physics.dyn4j.Converter;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jDistanceJointDebugControl;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jJointDebugControl;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jMouseJointDebugControl;
+import com.jme3.physics.dyn4j.debug.control.Dyn4jPrismaticJointDebugControl;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jRevoluteJointDebugControl;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jWeldJointDebugControl;
 import com.jme3.physics.dyn4j.debug.shape.CapsuleDebug;
@@ -187,6 +189,8 @@ public class Dyn4jDebugShapeFactory {
             jointControl = new Dyn4jMouseJointDebugControl(dyn4jDebugAppState, joint);
         } else if (joint instanceof WeldJoint) {
             jointControl = new Dyn4jWeldJointDebugControl(dyn4jDebugAppState, joint);
+        } else if (joint instanceof PrismaticJoint) {
+            jointControl = new Dyn4jPrismaticJointDebugControl(dyn4jDebugAppState, joint);
         } else {
             logger.warning(String.format("#### Joint '%s' not supported. ####", joint.getClass().getSimpleName()));
         }
