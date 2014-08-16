@@ -43,6 +43,7 @@ import org.dyn4j.dynamics.joint.PulleyJoint;
 import org.dyn4j.dynamics.joint.RevoluteJoint;
 import org.dyn4j.dynamics.joint.RopeJoint;
 import org.dyn4j.dynamics.joint.WeldJoint;
+import org.dyn4j.dynamics.joint.WheelJoint;
 import org.dyn4j.geometry.Capsule;
 import org.dyn4j.geometry.Circle;
 import org.dyn4j.geometry.Convex;
@@ -65,6 +66,7 @@ import com.jme3.physics.dyn4j.debug.control.Dyn4jPulleyJointDebugControl;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jRevoluteJointDebugControl;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jRopeJointDebugControl;
 import com.jme3.physics.dyn4j.debug.control.Dyn4jWeldJointDebugControl;
+import com.jme3.physics.dyn4j.debug.control.Dyn4jWheelJointDebugControl;
 import com.jme3.physics.dyn4j.debug.shape.CapsuleDebug;
 import com.jme3.physics.dyn4j.debug.shape.CircleDebug;
 import com.jme3.physics.dyn4j.debug.shape.HalfEllipseDebug;
@@ -199,6 +201,8 @@ public class Dyn4jDebugShapeFactory {
             jointControl = new Dyn4jPulleyJointDebugControl(dyn4jDebugAppState, (PulleyJoint) joint);
         } else if (joint instanceof RopeJoint) {
             jointControl = new Dyn4jRopeJointDebugControl(dyn4jDebugAppState, joint);
+        } else if (joint instanceof WheelJoint){
+        	jointControl = new Dyn4jWheelJointDebugControl(dyn4jDebugAppState, joint);
         } else {
             logger.warning(String.format("#### Joint '%s' not supported. ####", joint.getClass().getSimpleName()));
         }
