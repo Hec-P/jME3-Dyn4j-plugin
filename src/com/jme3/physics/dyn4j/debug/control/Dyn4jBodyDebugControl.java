@@ -41,6 +41,7 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 
+import com.jme3.material.Material;
 import com.jme3.physics.dyn4j.control.Dyn4jBodyControl;
 import com.jme3.physics.dyn4j.debug.Dyn4jDebugAppState;
 import com.jme3.physics.dyn4j.debug.PhysicDebugColor;
@@ -57,7 +58,8 @@ public class Dyn4jBodyDebugControl extends Dyn4jBodyControl {
     protected Dyn4jDebugAppState dyn4jDebugAppState = null;
 
     protected Map<UUID, Convex> shapes = new HashMap<UUID, Convex>();
-    protected List<Node> geometries = new ArrayList<Node>();
+    protected Map<UUID, Node> geometries = new HashMap<UUID, Node>();
+    protected Node spatialAsNode = null;
 
     public Dyn4jBodyDebugControl(final Dyn4jDebugAppState dyn4jDebugAppState, final Body body) {
         super(body);
@@ -74,14 +76,13 @@ public class Dyn4jBodyDebugControl extends Dyn4jBodyControl {
     @Override
     public void setSpatial(final Spatial spatial) {
         if (spatial != null && spatial instanceof Node) {
-            final Node spatialAsNode = (Node) spatial;
-            for (final Node node : this.geometries) {
-                spatialAsNode.attachChild(node);
+            this.spatialAsNode = (Node) spatial;
+            for (final Node node : this.geometries.values()) {
+                this.spatialAsNode.attachChild(node);
             }
         } else if (spatial == null && this.spatial != null) {
-            final Node spatialAsNode = (Node) this.spatial;
-            for (final Node node : this.geometries) {
-                spatialAsNode.detachChild(node);
+            for (final Node node : this.geometries.values()) {
+                this.spatialAsNode.detachChild(node);
             }
         }
         super.setSpatial(spatial);
@@ -90,6 +91,7 @@ public class Dyn4jBodyDebugControl extends Dyn4jBodyControl {
     @Override
     protected void controlUpdate(final float tpf) {
         final List<UUID> currentIDs = new ArrayList<UUID>();
+        final List<Node> currentGeoms = new ArrayList<Node>();
 
         for (final BodyFixture bodyFixture : this.body.getFixtures()) {
             final Convex shape = bodyFixture.getShape();
@@ -100,37 +102,32 @@ public class Dyn4jBodyDebugControl extends Dyn4jBodyControl {
 
                 // New fixture: create spatial for the shape, add it to geometry list and attach to the root spatial.
                 final Node node = processShape(shape);
-
-                if (node != null) {
-                    final Node spatialAsNode = (Node) this.spatial;
-                    spatialAsNode.attachChild(node);
-                }
+                currentGeoms.add(node);
             }
+
         }
 
         // Remove shapes that are not present on the body's features list.
         this.shapes.keySet().retainAll(currentIDs);
+        this.geometries.keySet().retainAll(currentIDs);
+        this.spatialAsNode.detachAllChildren();
 
+        // Set Material according to body state
+        final Material material;
         if (this.body.isAsleep()) {
-            for (final Node node : this.geometries) {
-                final Spatial geom = node.getChild(node.getName());
-                if (geom != null) {
-                    geom.setMaterial(this.dyn4jDebugAppState.getDebugMaterial(PhysicDebugColor.BLUE));
-                }
-            }
+            material = this.dyn4jDebugAppState.getDebugMaterial(PhysicDebugColor.BLUE);
         } else if (!this.body.isActive()) {
-            for (final Node node : this.geometries) {
-                final Spatial geom = node.getChild(node.getName());
-                if (geom != null) {
-                    geom.setMaterial(this.dyn4jDebugAppState.getDebugMaterial(PhysicDebugColor.GRAY));
-                }
-            }
+            material = this.dyn4jDebugAppState.getDebugMaterial(PhysicDebugColor.GRAY);
         } else {
-            for (final Node node : this.geometries) {
-                final Spatial geom = node.getChild(node.getName());
-                if (geom != null) {
-                    geom.setMaterial(this.dyn4jDebugAppState.getDebugMaterial(PhysicDebugColor.MAGENTA));
-                }
+            material = this.dyn4jDebugAppState.getDebugMaterial(PhysicDebugColor.MAGENTA);
+        }
+
+        for (final Node node : this.geometries.values()) {
+            this.spatialAsNode.attachChild(node);
+
+            final Spatial geom = node.getChild(node.getName());
+            if (geom != null) {
+                geom.setMaterial(material);
             }
         }
 
@@ -143,13 +140,11 @@ public class Dyn4jBodyDebugControl extends Dyn4jBodyControl {
     }
 
     private Node processShape(final Convex shape) {
-        this.shapes.put(shape.getId(), shape);
-
         final Node node = this.dyn4jDebugAppState.getDebugShape(shape);
 
-        if (node != null) {
-            this.geometries.add(node);
-        }
+        this.shapes.put(shape.getId(), shape);
+        this.geometries.put(shape.getId(), node);
+
         return node;
     }
 
